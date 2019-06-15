@@ -27,6 +27,10 @@ class RSAEncoder(RSA):
         raise Exception('you cannot set a value to encoded_msg field')
 
     def __repr__(self):
+        """
+        Function for developer's usage.
+        :return: string consisting of RSA decoder's open and secret keys
+        """
         return '''
         open key ({}, {})
         secret key {}
@@ -34,14 +38,22 @@ class RSAEncoder(RSA):
 
     @staticmethod
     def is_valid_msg(msg):
-        msg.lower()
+        """
+        Method for checking whether user's input is valid.
+        :param msg: user's input message
+        :return: True if the message is valid, and False otherwise
+        """
         for char in msg:
             if char not in string.ascii_letters and char not in string.punctuation and char != ' ':
                 return False
         return True
 
     def preprocess_msg(self):
-        self.tmp_msg.lower()
+        """
+        Overloaded method for message preprocessing for encoding.
+        :return:
+        """
+        self.tmp_msg = self.tmp_msg.lower()
         cleared = ''
         for ch in self.tmp_msg:
             if ch in string.ascii_lowercase:
@@ -57,13 +69,21 @@ class RSAEncoder(RSA):
         super().preprocess_msg()
 
     def encode(self):
+        """
+        Method for encoding massage.
+        :return:
+        """
         self.preprocess_msg()
-        print(self.tmp_msg)
         self._find_e()
 
         self.__encoded_msg = self._calculate(self.e)
 
     def read(self):
+        """
+        Method for reading user's input, validating user's input
+        and assigning the values to certain fields.
+        :return:
+        """
         print('enter message to encode in latin alphabet')
         self.msg = input('> ')
         while not self.is_valid_msg(self.msg):
@@ -94,5 +114,5 @@ class RSAEncoder(RSA):
         :return:
         """
         print('''message: {}
-        open key: ({}, {})
-        encoded message: {}'''.format(self.msg, self.n, self.e, self.__encoded_msg))
+open key: ({}, {})
+encoded message: {}'''.format(self.msg, self.n, self.e, self.__encoded_msg))
